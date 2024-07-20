@@ -5,99 +5,105 @@ import time
 
 app = FastAPI()
 
-cache = {"data": None, "timestamp": 0}
-cache_duration = 60 * 30  # 30 minutes
+
+def extract_value(element, keyword):
+    """Extract and clean the numeric value from the element."""
+    if element:
+        text = element.text.strip().replace(keyword, "").replace("$", "").strip()
+        return float(text)
+    return None
 
 
-def scrape_website(idx: int):
-    global cache
-    current_time = time.time()
-
-    if cache["data"] and (current_time - cache["timestamp"] < cache_duration):
-        return cache["data"]
-
-    url = 'https://dolar-arg-app.netlify.app'
-    page = requests.get(url)
+def scrape_blue_website():
+    main_url = 'https://dolar-arg-app.netlify.app'
+    page = requests.get(main_url)
     soup = BeautifulSoup(page.content, "html.parser")
 
-    data_blue_venta = soup.find_all("div", class_="text-right")
+    venta_elements = soup.find_all("div", class_="text-right")
+    compra_elements = soup.find_all("div", class_=lambda value: value == "" or value is None)
 
-    data_blue_compra = soup.find_all("div", class_=lambda value: value == "" or value is None)
+    venta_value = extract_value(venta_elements[1], "Venta")
+    compra_value = extract_value(compra_elements[2], "Compra")
 
-    data_blue_venta = data_blue_venta[1].text.strip().replace("Venta", "").replace("$", "").lstrip()
-    data_blue_compra = data_blue_compra[2].text.strip().replace("Compra", "").replace("$", "").lstrip()
-    promedio = (float(data_blue_compra) + float(data_blue_venta)) / 2
-
-    return {"compra": data_blue_compra,
-            "venta": data_blue_venta,
+    if venta_value and compra_value:
+        promedio = (compra_value + venta_value) / 2
+        return {
+            "compra": f"{compra_value:.2f}",
+            "venta": f"{venta_value:.2f}",
             "promedio": f"{promedio:.0f}"
-            }
+        }
+    return {"error": "Unable to extract data"}
 
-    # Update cache with new data
-    scraped_data = {
-        "compra": "example_compra",  # Replace with actual data
-        "venta": "example_venta",  # Replace with actual data
-        "promedio": "example_promedio"  # Replace with actual data
-    }
-    cache = {"data": scraped_data, "timestamp": current_time}
+def scrape_oficial_website():
+    main_url = 'https://dolar-arg-app.netlify.app'
+    page = requests.get(main_url)
+    soup = BeautifulSoup(page.content, "html.parser")
 
-    return scraped_data
+    venta_elements = soup.find_all("div", class_="text-right")
+    compra_elements = soup.find_all("div", class_=lambda value: value == "" or value is None)
 
+    venta_value = extract_value(venta_elements[0], "Venta")
+    compra_value = extract_value(compra_elements[0], "Compra")
 
-def scrape_extra(idx: int):
-    return
+    if venta_value and compra_value:
+        promedio = (compra_value + venta_value) / 2
+        return {
+            "compra": f"{compra_value:.2f}",
+            "venta": f"{venta_value:.2f}",
+            "promedio": f"{promedio:.0f}"
+        }
+    return {"error": "Unable to extract data"}
+
+@app.get("/blue")
+async def scrape():
+    return scrape_blue_website()
 
 
 @app.get("/oficial")
 async def scrape():
-    return scrape_website(0)
-
-
-@app.get("/blue")
-async def scrape():
-    return scrape_website(1)
+    return scrape_oficial_website()
 
 
 @app.get("/MEP")
 async def scrape():
-    return scrape_website(2)
+    return
 
 
 @app.get("/CCL")
 async def scrape():
-    return scrape_website(3)
+    return
 
 
 @app.get("/Mayorista")
 async def scrape():
-    return scrape_website(4)
+    return
 
 
 @app.get("/Cripto")
 async def scrape():
-    return scrape_website(5)
+    return
 
 
 @app.get("/Tarjeta")
 async def scrape():
-    return scrape_website(6)
+    return
 
 
 @app.get("/USD")
 async def scrape():
-    return scrape_website(7)
+    return
 
 
 @app.get("/Euro")
 async def scrape():
-    return scrape_extra(0)
+    return
 
 
 @app.get("/Real")
 async def scrape():
-    return scrape_extra(1)
+    return
 
 
 @app.get("/Chilenos")
 async def scrape():
-    return scrape_extra(2)
+    return

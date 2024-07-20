@@ -87,7 +87,9 @@ curl https://fastapiproject-1-eziw.onrender.com/euro
 ### Documentation
 
 - [API Documentation](https://fastapiproject-1-eziw.onrender.com/docs)
-- **Interactive API**: [Monedas API Docs](https://fastapiproject-1-eziw.onrender.com/redoc)
+
+> ![TIP]
+> [Interactive API](https://fastapiproject-1-eziw.onrender.com/redoc)
 
 ### Contributing
 
@@ -96,4 +98,6 @@ Contributions are welcome! Feel free to submit a pull request or open an issue i
 ### License
 
 This project is licensed under the Unlicense. This is part of the public domain and free to use as you see fit.
-```
+
+> ![IMPORTANT]
+> This API is hosted in Render free tier, which may have usage limitations. Please use responsibly and consider hosting your own instance if needed.

@@ -1,39 +1,54 @@
-from fastapi import FastAPI
+import httpx
 from bs4 import BeautifulSoup
 import requests
-import time
+from fastapi import FastAPI, HTTPException
 
 app = FastAPI()
 
 
-def extract_value(element, keyword):
-    """Extract and clean the numeric value from the element."""
-    if element:
-        text = element.text.strip().replace(keyword, "").replace("$", "").strip()
-        return float(text)
-    return None
+def extract_value(element, type_value):
+    try:
+        value_text = element.text.replace(',', '.').replace('$', '').strip()
+        value_text = ''.join(filter(lambda x: x.isdigit() or x == '.', value_text))
+        return float(value_text)
+    except ValueError as e:
+        raise ValueError(f"Failed to convert {type_value} value to float: {e}")
 
 
 def scrape_currency_website(currency_type, venta_index, compra_index):
     main_url = 'https://dolar-arg-app.netlify.app'
-    page = requests.get(main_url)
-    soup = BeautifulSoup(page.content, "html.parser")
+    try:
+        response = requests.get(main_url)
 
-    venta_elements = soup.find_all("div", class_="text-right")
-    compra_elements = soup.find_all("div", class_=lambda value: value == "" or value is None)
+        if response.status_code != 200:
+            raise HTTPException(status_code=404,
+                                detail=f"Failed to fetch the webpage: Status code {response.status_code}")
 
-    venta_value = extract_value(venta_elements[venta_index], "Venta")
-    compra_value = extract_value(compra_elements[compra_index], "Compra")
+        soup = BeautifulSoup(response.content, "html.parser")
 
-    if venta_value and compra_value:
+        venta_elements = soup.find_all("div", class_="text-right")
+        compra_elements = soup.find_all("div", class_=lambda value: value == "" or value is None)
+
+        if len(venta_elements) <= venta_index or len(compra_elements) <= compra_index:
+            raise HTTPException(status_code=404, detail="Required elements not found or index out of range")
+
+        venta_value = extract_value(venta_elements[venta_index], "Venta")
+        compra_value = extract_value(compra_elements[compra_index], "Compra")
+
         promedio = (compra_value + venta_value) / 2
+
         return {
             "currency": currency_type,
             "compra": f"{compra_value:.2f}",
             "venta": f"{venta_value:.2f}",
             "promedio": f"{promedio:.2f}"
         }
-    return {"error": f"Unable to extract data for {currency_type}"}
+    except requests.RequestException as e:
+        raise HTTPException(status_code=500, detail=f"Request error: {e}")
+    except ValueError as e:
+        raise HTTPException(status_code=500, detail=f"Value error: {e}")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Internal Server Error: {e}")
 
 
 @app.get("/blue")
@@ -70,8 +85,9 @@ async def scrape_cripto():
 async def scrape_tarjeta():
     return scrape_currency_website("Tarjeta", 6, 7)
 
+
 @app.get("/USD")
-async def scrape():
+async def scrape_usd():
     return {
         "blue": await scrape_blue(),
         "oficial": await scrape_oficial(),
@@ -94,5 +110,39 @@ async def scrape():
 
 
 @app.get("/Chilenos")
-async def scrape():
-    return
+async def scrape_chilenos():
+    url = 'https://dolarhoy.com/cotizacion-peso-chileno'
+    try:
+        async with httpx.AsyncClient() as client:
+            response = await client.get(url)
+
+            if response.status_code != 200:
+                raise HTTPException(status_code=404, detail="Failed to fetch the webpage")
+
+            soup = BeautifulSoup(response.content, "html.parser")
+            values = soup.find_all("div", class_="value")
+
+            if len(values) < 2:
+                raise HTTPException(status_code=404, detail="Required elements not found")
+
+            # Extract the values and clean them
+            compra_text = values[0].text.replace(',', '.').replace('$', '').strip()
+            venta_text = values[1].text.replace(',', '.').replace('$', '').strip()
+
+            compra = float(compra_text)
+            venta = float(venta_text)
+            promedio = (compra + venta) / 2
+
+            return {
+                "currency": "Chilenos",
+                "compra": f"{compra:.2f}",
+                "venta": f"{venta:.2f}",
+                "promedio": f"{promedio:.2f}"
+            }
+
+    except httpx.RequestError as e:
+        raise HTTPException(status_code=500, detail=f"Request error: {e}")
+    except ValueError as e:
+        raise HTTPException(status_code=500, detail=f"Value error: {e}")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Internal Server Error: {e}")

@@ -45,7 +45,7 @@ Convert an amount from one currency to another using the latest exchange rates:
 #### Example
 
 ```bash
-curl https://fastapiproject-1-eziw.onrender.com/convert?source=USD&target=EUR&amount=100
+curl https://fastapiproject-1-eziw.onrender.com/USD/EUR/100
 ```
 
 ```json
@@ -63,10 +63,10 @@ curl https://fastapiproject-1-eziw.onrender.com/blue
 
 ```json
 {
-  "currency": "USD",
-  "buy": 160.0,
-  "sell": 165.0,
-  "average": 162.5,
-  "spread": 5.0
+  "currency": "blue",
+  "compra": "1425.00 ARS",
+  "venta": "1445.00 ARS",
+  "promedio": "1435.00 ARS",
+  "spread": "20.00 ARS"
 }
 ```

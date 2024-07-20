@@ -41,7 +41,8 @@ def scrape_currency_website(currency_type, venta_index, compra_index):
             "currency": currency_type,
             "compra": f"{compra_value:.2f}",
             "venta": f"{venta_value:.2f}",
-            "promedio": f"{promedio:.2f}"
+            "promedio": f"{promedio:.2f}",
+            "spread": f"{venta_value - compra_value:.2f}"
         }
     except requests.RequestException as e:
         raise HTTPException(status_code=500, detail=f"Request error: {e}")
@@ -100,12 +101,12 @@ async def scrape_usd():
 
 
 @app.get("/Euro")
-async def scrape():
-    return
+async def scrape_euro():
+
 
 
 @app.get("/Real")
-async def scrape():
+async def scrape_real():
     return
 
 
@@ -137,7 +138,8 @@ async def scrape_chilenos():
                 "currency": "Chilenos",
                 "compra": f"{compra:.2f}",
                 "venta": f"{venta:.2f}",
-                "promedio": f"{promedio:.2f}"
+                "promedio": f"{promedio:.2f}",
+                "spread": f"{venta - compra:.2f}"
             }
 
     except httpx.RequestError as e:

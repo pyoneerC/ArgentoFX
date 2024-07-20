@@ -14,7 +14,7 @@ def extract_value(element, keyword):
     return None
 
 
-def scrape_blue_website():
+def scrape_currency_website(currency_type, venta_index, compra_index):
     main_url = 'https://dolar-arg-app.netlify.app'
     page = requests.get(main_url)
     soup = BeautifulSoup(page.content, "html.parser")
@@ -22,76 +22,65 @@ def scrape_blue_website():
     venta_elements = soup.find_all("div", class_="text-right")
     compra_elements = soup.find_all("div", class_=lambda value: value == "" or value is None)
 
-    venta_value = extract_value(venta_elements[1], "Venta")
-    compra_value = extract_value(compra_elements[2], "Compra")
+    venta_value = extract_value(venta_elements[venta_index], "Venta")
+    compra_value = extract_value(compra_elements[compra_index], "Compra")
 
     if venta_value and compra_value:
         promedio = (compra_value + venta_value) / 2
         return {
+            "currency": currency_type,
             "compra": f"{compra_value:.2f}",
             "venta": f"{venta_value:.2f}",
-            "promedio": f"{promedio:.0f}"
+            "promedio": f"{promedio:.2f}"
         }
-    return {"error": "Unable to extract data"}
+    return {"error": f"Unable to extract data for {currency_type}"}
 
-def scrape_oficial_website():
-    main_url = 'https://dolar-arg-app.netlify.app'
-    page = requests.get(main_url)
-    soup = BeautifulSoup(page.content, "html.parser")
-
-    venta_elements = soup.find_all("div", class_="text-right")
-    compra_elements = soup.find_all("div", class_=lambda value: value == "" or value is None)
-
-    venta_value = extract_value(venta_elements[0], "Venta")
-    compra_value = extract_value(compra_elements[0], "Compra")
-
-    if venta_value and compra_value:
-        promedio = (compra_value + venta_value) / 2
-        return {
-            "compra": f"{compra_value:.2f}",
-            "venta": f"{venta_value:.2f}",
-            "promedio": f"{promedio:.0f}"
-        }
-    return {"error": "Unable to extract data"}
 
 @app.get("/blue")
-async def scrape():
-    return scrape_blue_website()
+async def scrape_blue():
+    return scrape_currency_website("blue", 1, 2)
 
 
 @app.get("/oficial")
-async def scrape():
-    return scrape_oficial_website()
+async def scrape_oficial():
+    return scrape_currency_website("oficial", 0, 1)
 
 
 @app.get("/MEP")
-async def scrape():
-    return
+async def scrape_mep():
+    return scrape_currency_website("MEP", 2, 3)
 
 
 @app.get("/CCL")
-async def scrape():
-    return
+async def scrape_ccl():
+    return scrape_currency_website("CCL", 3, 4)
 
 
 @app.get("/Mayorista")
-async def scrape():
-    return
+async def scrape_mayorista():
+    return scrape_currency_website("Mayorista", 4, 5)
 
 
 @app.get("/Cripto")
-async def scrape():
-    return
+async def scrape_cripto():
+    return scrape_currency_website("Cripto", 5, 6)
 
 
 @app.get("/Tarjeta")
-async def scrape():
-    return
-
+async def scrape_tarjeta():
+    return scrape_currency_website("Tarjeta", 6, 7)
 
 @app.get("/USD")
 async def scrape():
-    return
+    return {
+        "blue": await scrape_blue(),
+        "oficial": await scrape_oficial(),
+        "MEP": await scrape_mep(),
+        "CCL": await scrape_ccl(),
+        "Mayorista": await scrape_mayorista(),
+        "Cripto": await scrape_cripto(),
+        "Tarjeta": await scrape_tarjeta()
+    }
 
 
 @app.get("/Euro")

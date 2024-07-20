@@ -86,6 +86,17 @@ curl https://fastapiproject-1-eziw.onrender.com/euro
 }
 ```
 
+```bash
+curl https://fastapiproject-1-eziw.onrender.com/oro
+```
+
+```json
+{
+  "currency": "Oro",
+  "venta": "2398.90 ARS"
+}
+```
+
 ### Documentation
 
 - [API Documentation](https://fastapiproject-1-eziw.onrender.com/docs)

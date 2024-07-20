@@ -10,45 +10,55 @@ Content-Type: application/json
 
 ###
 
-GET http://127.0.0.1:8000/MEP
+GET http://127.0.0.1:8000/mep
 Content-Type: application/json
 
 ###
 
-GET http://127.0.0.1:8000/CCL
+GET http://127.0.0.1:8000/ccl
 Content-Type: application/json
 
 ###
 
-GET http://127.0.0.1:8000/Mayorista
+GET http://127.0.0.1:8000/mayorista
 Content-Type: application/json
 
 ###
 
-GET http://127.0.0.1:8000/Cripto
+GET http://127.0.0.1:8000/cripto
 Content-Type: application/json
 
 ###
 
-GET http://127.0.0.1:8000/Tarjeta
+GET http://127.0.0.1:8000/tarjeta
 Content-Type: application/json
 
 ###
 
-GET http://127.0.0.1:8000/USD
+GET http://127.0.0.1:8000/usd
 Content-Type: application/json
 
 ###
 
-GET http://127.0.0.1:8000/Euro
+GET http://127.0.0.1:8000/euro
 Content-Type: application/json
 
 ###
 
-GET http://127.0.0.1:8000/Real
+GET http://127.0.0.1:8000/real
 Content-Type: application/json
 
 ###
 
-GET http://127.0.0.1:8000/Chilenos
+GET http://127.0.0.1:8000/clp
+Content-Type: application/json
+
+###
+
+GET http://127.0.0.1:8000/uru
+Content-Type: application/json
+
+###
+
+GET http://127.0.0.1:8000/cotizaciones
 Content-Type: application/json

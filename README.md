@@ -43,6 +43,13 @@ Retrieve the latest exchange rates for various currencies:
 
 Each endpoint provides the current exchange rate, including buy and sell prices, average rate, and spread.
 
+### Documentation
+
+- [API Documentation](https://fastapiproject-1-eziw.onrender.com/docs) (try it on the browser!)
+
+> [!TIP]
+> [Interactive API](https://fastapiproject-1-eziw.onrender.com/redoc)
+
 ## Example Usage
 
 ```bash
@@ -87,13 +94,6 @@ curl -X GET --location https://fastapiproject-1-eziw.onrender.com/euro
 ```
 
 ![Monedas API CLI](imgs/cli.png)
-
-### Documentation
-
-- [API Documentation](https://fastapiproject-1-eziw.onrender.com/docs) (try it on the browser!)
-
-> [!TIP]
-> [Interactive API](https://fastapiproject-1-eziw.onrender.com/redoc)
 
 ### Contributing
 

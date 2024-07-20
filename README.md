@@ -99,7 +99,7 @@ curl https://fastapiproject-1-eziw.onrender.com/oro
 
 ### Documentation
 
-- [API Documentation](https://fastapiproject-1-eziw.onrender.com/docs)
+- [API Documentation](https://fastapiproject-1-eziw.onrender.com/docs) (try it on the browser!)
 
 > [!TIP]
 > [Interactive API](https://fastapiproject-1-eziw.onrender.com/redoc)

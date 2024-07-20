@@ -86,16 +86,7 @@ curl -X GET --location https://fastapiproject-1-eziw.onrender.com/euro
 }
 ```
 
-```bash
-curl -X GET --location https://fastapiproject-1-eziw.onrender.com/oro
-```
-
-```json
-{
-  "currency": "Oro",
-  "venta": "2398.90 ARS"
-}
-```
+![Monedas API CLI](imgs/cli.png)
 
 ### Documentation
 

@@ -259,6 +259,39 @@ async def scrape_uruguayos():
         raise HTTPException(status_code=500, detail=f"Internal Server Error: {e}")
 
 
+@app.get("/oro")
+async def scrape_oro():
+    url = 'https://dolarhoy.com/cotizacion-oro'
+    try:
+        async with httpx.AsyncClient() as client:
+            response = await client.get(url)
+
+            if response.status_code != 200:
+                raise HTTPException(status_code=404, detail="Failed to fetch the webpage")
+
+            soup = BeautifulSoup(response.content, "html.parser")
+            values = soup.find_all("div", class_="value")
+
+            if len(values) < 1:
+                raise HTTPException(status_code=404, detail="Required elements not found")
+
+            venta_text = values[0].text.replace(',', '.').replace('$', '').strip()
+
+            venta = float(venta_text)
+
+            return {
+                "currency": "Oro",
+                "venta": f"{venta:.2f} ARS",
+            }
+
+    except httpx.RequestError as e:
+        raise HTTPException(status_code=500, detail=f"Request error: {e}")
+    except ValueError as e:
+        raise HTTPException(status_code=500, detail=f"Value error: {e}")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Internal Server Error: {e}")
+
+
 @app.get("/cotizaciones")
 async def scrape_all():
     return {
@@ -266,5 +299,19 @@ async def scrape_all():
         "euro": await scrape_euro(),
         "real": await scrape_real(),
         "clp": await scrape_chilenos(),
-        "uru": await scrape_uruguayos()
+        "uru": await scrape_uruguayos(),
+        "oro": await scrape_oro(),
     }
+
+
+@app.get("/")
+async def status():
+    try:
+        async with httpx.AsyncClient() as client:
+            response = await client.get("https://example.com")
+            if response.status_code == 200:
+                return {"status": "up :)"}
+            else:
+                return {"status": "down :("}
+    except Exception as e:
+        return {"status": "down :( ", "error": str(e)}

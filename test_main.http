@@ -62,3 +62,17 @@ Content-Type: application/json
 
 GET http://127.0.0.1:8000/cotizaciones
 Content-Type: application/json
+
+###
+
+GET http://127.0.0.1:8000/oro
+Content-Type: application/json
+
+### API status
+
+GET http://127.0.0.1:8000/
+Content-Type: application/json
+
+### docs:
+### https://fastapiproject-1-eziw.onrender.com/docs
+### https://fastapiproject-1-eziw.onrender.com/redoc

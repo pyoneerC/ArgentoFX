@@ -315,3 +315,37 @@ async def status():
                 return {"status": "down :("}
     except Exception as e:
         return {"status": "down :( ", "error": str(e)}
+
+
+conversion_rates = {
+    "USD": 1.0,
+    "EUR": 0.92,
+    "ARS": 923.86,
+    "BRL": 5.60,
+    "CLP": 941.75,
+    "UYU": 40.27,
+    "GBP": 0.77,
+    "JPY": 157.48,
+    "CNY": 7.27,
+    "BTC": 0.000015,
+    "AUD": 1.50,
+}
+
+
+@app.get("/convert/{from_currency}/{to_currency}/{amount}")
+async def convert_currency(from_currency: str, to_currency: str, amount: float):
+    try:
+        if from_currency not in conversion_rates or to_currency not in conversion_rates:
+            raise HTTPException(status_code=404, detail="Currency not supported")
+
+        converted_amount = (amount / conversion_rates[from_currency]) * conversion_rates[to_currency]
+        return {
+            "from_currency": from_currency,
+            "to_currency": to_currency,
+            "original_amount": amount,
+            "converted_amount": converted_amount,
+            "conversion_rate": conversion_rates[to_currency] / conversion_rates[from_currency],
+            "price": f"{from_currency} {amount} = {to_currency} {converted_amount:.2f}"
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

@@ -76,3 +76,26 @@ Content-Type: application/json
 ### docs:
 ### https://fastapiproject-1-eziw.onrender.com/docs
 ### https://fastapiproject-1-eziw.onrender.com/redoc
+
+GET http://127.0.0.1:8000/convert/USD/EUR/100
+Content-Type: application/json
+
+###
+
+GET http://127.0.0.1:8000/convert/UYU/USD/100
+Content-Type: application/json
+
+###
+
+GET http://127.0.0.1:8000/convert/BTC/CNY/25000
+Content-Type: application/json
+
+###
+
+GET http://127.0.0.1:8000/convert/JPY/BRL/100
+Content-Type: application/json
+
+###
+
+GET http://127.0.0.1:8000/convert/AUD/USD/100
+Content-Type: application/json

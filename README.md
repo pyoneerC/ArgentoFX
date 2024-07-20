@@ -9,7 +9,7 @@ Monedas API is a robust FastAPI application designed to provide real-time curren
 ![Monedas API GIF](imgs/api.gif)
 
 > [!NOTE]
-> Inspired by Enzo Notario's Dolar API.
+> Inspired by Enzo Notario's [Dolar API.](https://github.com/enzonotario/esjs-dolar-api)
 
 ## Features
 

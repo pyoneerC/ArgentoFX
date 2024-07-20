@@ -1,4 +1,54 @@
 # Test your FastAPI endpoints
 
+GET http://127.0.0.1:8000/oficial
+Content-Type: application/json
+
+###
+
 GET http://127.0.0.1:8000/blue
+Content-Type: application/json
+
+###
+
+GET http://127.0.0.1:8000/MEP
+Content-Type: application/json
+
+###
+
+GET http://127.0.0.1:8000/CCL
+Content-Type: application/json
+
+###
+
+GET http://127.0.0.1:8000/Mayorista
+Content-Type: application/json
+
+###
+
+GET http://127.0.0.1:8000/Cripto
+Content-Type: application/json
+
+###
+
+GET http://127.0.0.1:8000/Tarjeta
+Content-Type: application/json
+
+###
+
+GET http://127.0.0.1:8000/USD
+Content-Type: application/json
+
+###
+
+GET http://127.0.0.1:8000/Euro
+Content-Type: application/json
+
+###
+
+GET http://127.0.0.1:8000/Real
+Content-Type: application/json
+
+###
+
+GET http://127.0.0.1:8000/Chilenos
 Content-Type: application/json

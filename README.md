@@ -46,7 +46,7 @@ Each endpoint provides the current exchange rate, including buy and sell prices,
 ## Example Usage
 
 ```bash
-curl https://fastapiproject-1-eziw.onrender.com/USD/EUR/100
+curl -X GET --location https://fastapiproject-1-eziw.onrender.com/USD/EUR/100
 ```
 
 ```json
@@ -59,7 +59,7 @@ curl https://fastapiproject-1-eziw.onrender.com/USD/EUR/100
 ```
 
 ```bash
-curl https://fastapiproject-1-eziw.onrender.com/blue
+curl -X GET --location https://fastapiproject-1-eziw.onrender.com/blue
 ```
 
 ```json
@@ -73,7 +73,7 @@ curl https://fastapiproject-1-eziw.onrender.com/blue
 ```
 
 ```bash 
-curl https://fastapiproject-1-eziw.onrender.com/euro
+curl -X GET --location https://fastapiproject-1-eziw.onrender.com/euro
 ```
 
 ```json
@@ -87,7 +87,7 @@ curl https://fastapiproject-1-eziw.onrender.com/euro
 ```
 
 ```bash
-curl https://fastapiproject-1-eziw.onrender.com/oro
+curl -X GET --location https://fastapiproject-1-eziw.onrender.com/oro
 ```
 
 ```json

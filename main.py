@@ -8,29 +8,36 @@ app = FastAPI()
 
 def extract_value(element, type_value):
     try:
-        value_text = element.text.replace(',', '.').replace('$', '').strip()
-        value_text = ''.join(filter(lambda x: x.isdigit() or x == '.', value_text))
+        value_text = element.text.replace(",", ".").replace("$", "").strip()
+        value_text = "".join(filter(lambda x: x.isdigit() or x == ".", value_text))
         return float(value_text)
     except ValueError as e:
         raise ValueError(f"Failed to convert {type_value} value to float: {e}")
 
 
 def scrape_currency_website(currency_type, venta_index, compra_index):
-    main_url = 'https://dolar-arg-app.netlify.app'
+    main_url = "https://dolar-arg-app.netlify.app"
     try:
         response = requests.get(main_url)
 
         if response.status_code != 200:
-            raise HTTPException(status_code=404,
-                                detail=f"Failed to fetch the webpage: Status code {response.status_code}")
+            raise HTTPException(
+                status_code=404,
+                detail=f"Failed to fetch the webpage: Status code {response.status_code}",
+            )
 
         soup = BeautifulSoup(response.content, "html.parser")
 
         venta_elements = soup.find_all("div", class_="text-right")
-        compra_elements = soup.find_all("div", class_=lambda value: value == "" or value is None)
+        compra_elements = soup.find_all(
+            "div", class_=lambda value: value == "" or value is None
+        )
 
         if len(venta_elements) <= venta_index or len(compra_elements) <= compra_index:
-            raise HTTPException(status_code=404, detail="Required elements not found or index out of range")
+            raise HTTPException(
+                status_code=404,
+                detail="Required elements not found or index out of range",
+            )
 
         venta_value = extract_value(venta_elements[venta_index], "Venta")
         compra_value = extract_value(compra_elements[compra_index], "Compra")
@@ -96,29 +103,33 @@ async def scrape_usd():
         "CCL": await scrape_ccl(),
         "Mayorista": await scrape_mayorista(),
         "Cripto": await scrape_cripto(),
-        "Tarjeta": await scrape_tarjeta()
+        "Tarjeta": await scrape_tarjeta(),
     }
 
 
 @app.get("/euro")
 async def scrape_euro():
-    url = 'https://dolarhoy.com/cotizacion-euro'
+    url = "https://dolarhoy.com/cotizacion-euro"
     try:
         async with httpx.AsyncClient() as client:
             response = await client.get(url)
 
             if response.status_code != 200:
-                raise HTTPException(status_code=404, detail="Failed to fetch the webpage")
+                raise HTTPException(
+                    status_code=404, detail="Failed to fetch the webpage"
+                )
 
             soup = BeautifulSoup(response.content, "html.parser")
             values = soup.find_all("div", class_="value")
 
             if len(values) < 2:
-                raise HTTPException(status_code=404, detail="Required elements not found")
+                raise HTTPException(
+                    status_code=404, detail="Required elements not found"
+                )
 
             # Extract the values and clean them
-            compra_text = values[0].text.replace(',', '.').replace('$', '').strip()
-            venta_text = values[1].text.replace(',', '.').replace('$', '').strip()
+            compra_text = values[0].text.replace(",", ".").replace("$", "").strip()
+            venta_text = values[1].text.replace(",", ".").replace("$", "").strip()
 
             compra = float(compra_text)
             venta = float(venta_text)
@@ -142,23 +153,27 @@ async def scrape_euro():
 
 @app.get("/real")
 async def scrape_real():
-    url = 'https://dolarhoy.com/cotizacion-real-brasileno'
+    url = "https://dolarhoy.com/cotizacion-real-brasileno"
     try:
         async with httpx.AsyncClient() as client:
             response = await client.get(url)
 
             if response.status_code != 200:
-                raise HTTPException(status_code=404, detail="Failed to fetch the webpage")
+                raise HTTPException(
+                    status_code=404, detail="Failed to fetch the webpage"
+                )
 
             soup = BeautifulSoup(response.content, "html.parser")
             values = soup.find_all("div", class_="value")
 
             if len(values) < 2:
-                raise HTTPException(status_code=404, detail="Required elements not found")
+                raise HTTPException(
+                    status_code=404, detail="Required elements not found"
+                )
 
             # Extract the values and clean them
-            compra_text = values[0].text.replace(',', '.').replace('$', '').strip()
-            venta_text = values[1].text.replace(',', '.').replace('$', '').strip()
+            compra_text = values[0].text.replace(",", ".").replace("$", "").strip()
+            venta_text = values[1].text.replace(",", ".").replace("$", "").strip()
 
             compra = float(compra_text)
             venta = float(venta_text)
@@ -181,23 +196,27 @@ async def scrape_real():
 
 @app.get("/clp")
 async def scrape_chilenos():
-    url = 'https://dolarhoy.com/cotizacion-peso-chileno'
+    url = "https://dolarhoy.com/cotizacion-peso-chileno"
     try:
         async with httpx.AsyncClient() as client:
             response = await client.get(url)
 
             if response.status_code != 200:
-                raise HTTPException(status_code=404, detail="Failed to fetch the webpage")
+                raise HTTPException(
+                    status_code=404, detail="Failed to fetch the webpage"
+                )
 
             soup = BeautifulSoup(response.content, "html.parser")
             values = soup.find_all("div", class_="value")
 
             if len(values) < 2:
-                raise HTTPException(status_code=404, detail="Required elements not found")
+                raise HTTPException(
+                    status_code=404, detail="Required elements not found"
+                )
 
             # Extract the values and clean them
-            compra_text = values[0].text.replace(',', '.').replace('$', '').strip()
-            venta_text = values[1].text.replace(',', '.').replace('$', '').strip()
+            compra_text = values[0].text.replace(",", ".").replace("$", "").strip()
+            venta_text = values[1].text.replace(",", ".").replace("$", "").strip()
 
             compra = float(compra_text)
             venta = float(venta_text)
@@ -221,23 +240,27 @@ async def scrape_chilenos():
 
 @app.get("/uru")
 async def scrape_uruguayos():
-    url = 'https://dolarhoy.com/cotizacion-peso-uruguayo'
+    url = "https://dolarhoy.com/cotizacion-peso-uruguayo"
     try:
         async with httpx.AsyncClient() as client:
             response = await client.get(url)
 
             if response.status_code != 200:
-                raise HTTPException(status_code=404, detail="Failed to fetch the webpage")
+                raise HTTPException(
+                    status_code=404, detail="Failed to fetch the webpage"
+                )
 
             soup = BeautifulSoup(response.content, "html.parser")
             values = soup.find_all("div", class_="value")
 
             if len(values) < 2:
-                raise HTTPException(status_code=404, detail="Required elements not found")
+                raise HTTPException(
+                    status_code=404, detail="Required elements not found"
+                )
 
             # Extract the values and clean them
-            compra_text = values[0].text.replace(',', '.').replace('$', '').strip()
-            venta_text = values[1].text.replace(',', '.').replace('$', '').strip()
+            compra_text = values[0].text.replace(",", ".").replace("$", "").strip()
+            venta_text = values[1].text.replace(",", ".").replace("$", "").strip()
 
             compra = float(compra_text)
             venta = float(venta_text)
@@ -261,21 +284,25 @@ async def scrape_uruguayos():
 
 @app.get("/oro")
 async def scrape_oro():
-    url = 'https://dolarhoy.com/cotizacion-oro'
+    url = "https://dolarhoy.com/cotizacion-oro"
     try:
         async with httpx.AsyncClient() as client:
             response = await client.get(url)
 
             if response.status_code != 200:
-                raise HTTPException(status_code=404, detail="Failed to fetch the webpage")
+                raise HTTPException(
+                    status_code=404, detail="Failed to fetch the webpage"
+                )
 
             soup = BeautifulSoup(response.content, "html.parser")
             values = soup.find_all("div", class_="value")
 
             if len(values) < 1:
-                raise HTTPException(status_code=404, detail="Required elements not found")
+                raise HTTPException(
+                    status_code=404, detail="Required elements not found"
+                )
 
-            venta_text = values[0].text.replace(',', '.').replace('$', '').strip()
+            venta_text = values[0].text.replace(",", ".").replace("$", "").strip()
 
             venta = float(venta_text)
 
@@ -338,14 +365,17 @@ async def convert_currency(from_currency: str, to_currency: str, amount: float):
         if from_currency not in conversion_rates or to_currency not in conversion_rates:
             raise HTTPException(status_code=404, detail="Currency not supported")
 
-        converted_amount = (amount / conversion_rates[from_currency]) * conversion_rates[to_currency]
+        converted_amount = (
+            amount / conversion_rates[from_currency]
+        ) * conversion_rates[to_currency]
         return {
             "from_currency": from_currency,
             "to_currency": to_currency,
             "original_amount": amount,
             "converted_amount": converted_amount,
-            "conversion_rate": conversion_rates[to_currency] / conversion_rates[from_currency],
-            "price": f"{from_currency} {amount} = {to_currency} {converted_amount:.2f}"
+            "conversion_rate": conversion_rates[to_currency]
+            / conversion_rates[from_currency],
+            "price": f"{from_currency} {amount} = {to_currency} {converted_amount:.2f}",
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

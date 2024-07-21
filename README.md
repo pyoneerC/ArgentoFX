@@ -48,7 +48,7 @@ Cada endpoint proporciona la tasa de cambio actual, incluyendo precios de compra
 - [Documentación de la API](https://fastapiproject-1-eziw.onrender.com/docs) (¡pruébalo en el navegador!)
 
 > [!TIP]
-> [API Interactiva](https://fastapiproject-1-eziw.onrender.com/redoc)
+> Prueba la [API Interactiva!](https://fastapiproject-1-eziw.onrender.com/redoc)
 
 ## Ejemplo de Uso
 

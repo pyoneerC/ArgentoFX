@@ -1,56 +1,56 @@
 # Monedas API
 
-## Overview
+## Descripción General
 
-Monedas API is a robust FastAPI application designed to provide real-time currency exchange rates by scraping financial websites. The API primarily focuses on various exchange rates in Argentina, including USD (blue, official, MEP, CCL), Euro, Brazilian Real, Chilean Peso, Uruguayan Peso, and more. It also offers a conversion feature to convert amounts between supported currencies.
+Monedas API es una aplicación robusta desarrollada con FastAPI, diseñada para proporcionar tasas de cambio de divisas en tiempo real mediante scraping de sitios web financieros. La API se enfoca principalmente en varias tasas de cambio en Argentina, incluyendo USD (blue, oficial, MEP, CCL), Euro, Real Brasileño, Peso Chileno, Peso Uruguayo, y más. También ofrece una función de conversión para convertir montos entre las monedas soportadas.
 
 ![Monedas API](imgs/json.png)
 
 ![Monedas API GIF](imgs/api.gif)
 
 > [!NOTE]
-> Inspired by Enzo Notario's [Dolar API.](https://github.com/enzonotario/esjs-dolar-api)
+> Inspirado por la [Dolar API](https://github.com/enzonotario/esjs-dolar-api) de Enzo Notario.
 
-## Features
+## Funcionalidades
 
-- **Real-time Currency Rates**: Fetches the latest exchange rates for multiple currencies, specifically tailored for the Argentine market.
-- **Currency Conversion**: Allows conversion of amounts from one currency to another using the latest exchange rates.
-- **Comprehensive Currency Support**: Supports a wide range of currencies including USD (various rates), Euro, BRL, CLP, UYU, and more.
-- **Robust Error Handling**: Ensures reliable data fetching and processing with comprehensive error handling mechanisms.
+- **Tasas de Cambio en Tiempo Real**: Obtiene las últimas tasas de cambio para múltiples monedas, específicamente adaptadas para el mercado argentino.
+- **Conversión de Monedas**: Permite la conversión de montos de una moneda a otra utilizando las últimas tasas de cambio.
+- **Soporte Integral de Monedas**: Soporta una amplia gama de monedas, incluyendo USD (varias tasas), Euro, BRL, CLP, UYU, y más.
+- **Manejo Robusto de Errores**: Garantiza la obtención y procesamiento fiable de datos con mecanismos de manejo de errores integrales.
 
 ## Endpoints
 
-### Currency Exchange Rates
+### Tasas de Cambio de Divisas
 
-Retrieve the latest exchange rates for various currencies:
+Obtén las últimas tasas de cambio para varias monedas:
 
-#### USD Rates
-- `/blue` - Blue Dollar rate
-- `/oficial` - Official Dollar rate
-- `/mep` - MEP Dollar rate
-- `/ccl` - CCL Dollar rate
-- `/mayorista` - Wholesale Dollar rate
-- `/cripto` - Crypto Dollar rate
-- `/tarjeta` - Credit Card Dollar rate
+#### Tasas de USD
+- `/blue` - Tasa del Dólar Blue
+- `/oficial` - Tasa del Dólar Oficial
+- `/mep` - Tasa del Dólar MEP
+- `/ccl` - Tasa del Dólar CCL
+- `/mayorista` - Tasa del Dólar Mayorista
+- `/cripto` - Tasa del Dólar Cripto
+- `/tarjeta` - Tasa del Dólar Tarjeta
 
-#### Other Currencies
-- `/usd` - US Dollar rate
-- `/euro` - Euro rate
-- `/real` - Brazilian Real rate
-- `/clp` - Chilean Peso rate
-- `/uru` - Uruguayan Peso rate
-- `/oro` - Gold rate
+#### Otras Monedas
+- `/usd` - Tasa del Dólar Estadounidense
+- `/euro` - Tasa del Euro
+- `/real` - Tasa del Real Brasileño
+- `/clp` - Tasa del Peso Chileno
+- `/uru` - Tasa del Peso Uruguayo
+- `/oro` - Tasa del Oro
 
-Each endpoint provides the current exchange rate, including buy and sell prices, average rate, and spread.
+Cada endpoint proporciona la tasa de cambio actual, incluyendo precios de compra y venta, tasa promedio y spread.
 
-### Documentation
+### Documentación
 
-- [API Documentation](https://fastapiproject-1-eziw.onrender.com/docs) (try it on the browser!)
+- [Documentación de la API](https://fastapiproject-1-eziw.onrender.com/docs) (¡pruébalo en el navegador!)
 
 > [!TIP]
-> [Interactive API](https://fastapiproject-1-eziw.onrender.com/redoc)
+> [API Interactiva](https://fastapiproject-1-eziw.onrender.com/redoc)
 
-## Example Usage
+## Ejemplo de Uso
 
 ```bash
 curl -X GET --location https://fastapiproject-1-eziw.onrender.com/USD/EUR/100
@@ -97,11 +97,11 @@ curl -X GET --location https://fastapiproject-1-eziw.onrender.com/euro
 
 ### Contributing
 
-Contributions are welcome! Feel free to submit a pull request or open an issue if you have any suggestions or feedback.
+¡Las contribuciones son bienvenidas! No dudes en enviar un pull request o abrir un issue si tienes alguna sugerencia o comentario.
 
 ### License
 
-This project is licensed under the Unlicense. This is part of the public domain and free to use as you see fit.
+Este proyecto está licenciado bajo la Unlicense. Es parte del dominio público y puedes usarlo como desees.
 
 > [!IMPORTANT]
-> This API is hosted in Render free tier, which may have usage limitations. Please use responsibly and consider hosting your own instance if needed.
+> Esta API está alojada en el nivel gratuito de Render, que puede tener limitaciones de uso. Por favor, úsala de manera responsable y considera alojar tu propia instancia si es necesario.

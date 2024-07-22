@@ -97,7 +97,7 @@ curl -X GET --location https://fastapiproject-1-eziw.onrender.com/euro
 
 ## Diagrama de Arquitectura
 
-![Monedas API Architecture](imgs/diagram.png)
+![Monedas API Architecture](imgs/architecturediagram.png)
 
 ## Aplicaciones que consumen esta API
 

@@ -95,6 +95,10 @@ curl -X GET --location https://fastapiproject-1-eziw.onrender.com/euro
 
 ![Monedas API CLI](imgs/cli.png)
 
+## Diagrama de Arquitectura
+
+![Monedas API Architecture](imgs/diagram.png)
+
 ## Aplicaciones que consumen esta API
 
 - [Mercado Libre Price Chart](https://github.com/pyoneerC/mercado-libre-price-chart) - Una aplicación web que muestra un histograma de precios del producto seleccionado en Mercado Libre Argentina. (Hecha por mí)

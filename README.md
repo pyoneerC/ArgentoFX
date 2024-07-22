@@ -41,7 +41,7 @@ Obtén las últimas tasas de cambio para varias monedas:
 - `/uru` - Tasa del Peso Uruguayo
 - `/oro` - Tasa del Oro
 
-Cada endpoint proporciona la tasa de cambio actual, incluyendo precios de compra y venta, tasa promedio y spread.
+Cada endpoint proporciona la tasa de cambio actual, incluyendo precios de compra y venta, tasa promedio y la diferencia entre la venta y la compra (spread).
 
 ### Documentación
 

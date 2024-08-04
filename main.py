@@ -97,6 +97,7 @@ async def scrape_tarjeta():
 @app.get("/usd")
 async def scrape_usd():
     return {
+        "request_info": "GET /usd",
         "blue": await scrape_blue(),
         "oficial": await scrape_oficial(),
         "MEP": await scrape_mep(),
@@ -136,6 +137,7 @@ async def scrape_euro():
             promedio = (compra + venta) / 2
 
             return {
+                "request_info": "GET /euro",
                 "currency": "Euro",
                 "compra": f"{compra:.2f} ARS",
                 "venta": f"{venta:.2f} ARS",
@@ -180,6 +182,7 @@ async def scrape_real():
             promedio = (compra + venta) / 2
 
             return {
+                "request_info": "GET /real",
                 "currency": "Real",
                 "compra": f"{compra:.2f} ARS",
                 "venta": f"{venta:.2f} ARS",
@@ -223,6 +226,7 @@ async def scrape_chilenos():
             promedio = (compra + venta) / 2
 
             return {
+                "request_info": "GET /clp",
                 "currency": "Chilenos",
                 "compra": f"{compra:.2f} ARS",
                 "venta": f"{venta:.2f} ARS",
@@ -267,6 +271,7 @@ async def scrape_uruguayos():
             promedio = (compra + venta) / 2
 
             return {
+                "request_info": "GET /uru",
                 "currency": "Uruguayos",
                 "compra": f"{compra:.2f} ARS",
                 "venta": f"{venta:.2f} ARS",
@@ -307,6 +312,7 @@ async def scrape_oro():
             venta = float(venta_text)
 
             return {
+                "request_info": "GET /oro",
                 "currency": "Oro",
                 "venta": f"{venta:.2f} ARS",
             }

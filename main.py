@@ -383,7 +383,7 @@ async def convert_currency(from_currency: str, to_currency: str, amount: float):
 
 
 @app.exception_handler(404)
-async def not_found_exception_handler(request: Request, exc: HTTPException):
+async def not_found_exception_handler(request, exc: HTTPException):
     return JSONResponse(
         status_code=404,
         content={

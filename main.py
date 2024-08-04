@@ -369,6 +369,7 @@ async def convert_currency(from_currency: str, to_currency: str, amount: float):
             amount / conversion_rates[from_currency]
         ) * conversion_rates[to_currency]
         return {
+            "request_info": f"GET /convert/{from_currency}/{to_currency}/{amount}",
             "from_currency": from_currency,
             "to_currency": to_currency,
             "original_amount": amount,
@@ -379,3 +380,31 @@ async def convert_currency(from_currency: str, to_currency: str, amount: float):
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.exception_handler(404)
+async def not_found_exception_handler(request: Request, exc: HTTPException):
+    return JSONResponse(
+        status_code=404,
+        content={
+            "error": "Endpoint not found",
+            "detail": str(exc.detail),
+            "Available endpoints": [
+                "/blue",
+                "/oficial",
+                "/mep",
+                "/ccl",
+                "/mayorista",
+                "/cripto",
+                "/tarjeta",
+                "/usd",
+                "/euro",
+                "/real",
+                "/clp",
+                "/uru",
+                "/oro",
+                "/cotizaciones",
+                "/convert/{from_currency}/{to_currency}/{amount}",
+            ]
+        }
+    )

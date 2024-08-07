@@ -1,3 +1,5 @@
+import json
+
 import httpx
 from bs4 import BeautifulSoup
 import requests
@@ -29,7 +31,7 @@ def scrape_currency_website(currency_type, venta_index, compra_index):
     main_url = "https://dolar-arg-app.netlify.app"
     cache_value = r.get(currency_type.lower())
     if cache_value:
-        return eval(cache_value)
+        return json.loads(cache_value)
 
     try:
         response = requests.get(main_url)
@@ -66,7 +68,7 @@ def scrape_currency_website(currency_type, venta_index, compra_index):
             "spread": f"{venta_value - compra_value:.2f} ARS",
         }
 
-        r.setex(currency_type.lower(), 6000, str(result))
+        r.setex(currency_type.lower(), 6000, json.dumps(result))
 
         return result
 

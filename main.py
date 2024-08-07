@@ -10,12 +10,11 @@ load_dotenv()
 app = FastAPI()
 
 r = redis.Redis(
-    host=os.getenv("REDIS_HOST"),
-    port=6379,
-    password=os.getenv("REDIS_PASSWORD"),
-    ssl=True
+  host='assured-shrew-49745.upstash.io',
+  port=6379,
+  password='AcJRAAIjcDFkZmQ4MzA5NGM2MjU0NTNlOWI4OTVjYzNiODAwZjY5MnAxMA',
+  ssl=True
 )
-
 
 def extract_value(element, type_value):
     try:

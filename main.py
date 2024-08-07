@@ -128,7 +128,6 @@ async def scrape_euro():
                     status_code=404, detail="Required elements not found"
                 )
 
-            # Extract the values and clean them
             compra_text = values[0].text.replace(",", ".").replace("$", "").strip()
             venta_text = values[1].text.replace(",", ".").replace("$", "").strip()
 
@@ -173,7 +172,6 @@ async def scrape_real():
                     status_code=404, detail="Required elements not found"
                 )
 
-            # Extract the values and clean them
             compra_text = values[0].text.replace(",", ".").replace("$", "").strip()
             venta_text = values[1].text.replace(",", ".").replace("$", "").strip()
 

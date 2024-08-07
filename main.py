@@ -27,10 +27,9 @@ def extract_value(element, type_value):
 
 def scrape_currency_website(currency_type, venta_index, compra_index):
     main_url = "https://dolar-arg-app.netlify.app"
-    cache_key = currency_type
-    if r.exists(cache_key):
-        cached_value = r.get(cache_key)
-        return eval(cached_value)
+    cache_value = r.get(currency_type)
+    if cache_value:
+        return eval(cache_value)
 
     try:
         response = requests.get(main_url)
@@ -81,10 +80,9 @@ def scrape_currency_website(currency_type, venta_index, compra_index):
 
 def scrape_dolar_hoy(category):
     url = f"https://dolarhoy.com/cotizacion-{category}"
-    cache_key = f"{category}"
-    if r.exists(cache_key):
-        cached_value = r.get(cache_key)
-        return eval(cached_value)
+    cache_value = r.get(category)
+    if cache_value:
+        return eval(cache_value)
 
     try:
         response = requests.get(url)
@@ -117,7 +115,7 @@ def scrape_dolar_hoy(category):
             "spread": f"{venta - compra:.2f} ARS",
         }
 
-        r.setex(cache_key, 6000, str(result))
+        r.setex(category, 6000, str(result))
 
         return result
 
@@ -166,10 +164,9 @@ async def scrape_tarjeta():
 
 @app.get("/usd")
 async def scrape_usd():
-    cache_key = "usd"
-    if r.exists(cache_key):
-        cached_value = r.get(cache_key)
-        return eval(cached_value)
+    cache_value = r.get("usd")
+    if cache_value:
+        return eval(cache_value)
 
     result = {
         "blue": await scrape_blue(),
@@ -181,7 +178,7 @@ async def scrape_usd():
         "Tarjeta": await scrape_tarjeta(),
     }
 
-    r.setex(cache_key, 6000, str(result))
+    r.setex("usd", 6000, str(result))
     return result
 
 
@@ -207,10 +204,9 @@ async def scrape_uruguayos():
 
 @app.get("/cotizaciones")
 async def scrape_all():
-    cache_key = "cotizaciones"
-    if r.exists(cache_key):
-        cached_value = r.get(cache_key)
-        return eval(cached_value)
+    cache_value = r.get("cotizaciones")
+    if cache_value:
+        return eval(cache_value)
 
     result = {
         "usd": await scrape_usd(),
@@ -220,13 +216,13 @@ async def scrape_all():
         "uru": await scrape_uruguayos(),
     }
 
-    r.setex(cache_key, 6000, str(result))
+    r.setex("cotizaciones", 6000, str(result))
     return result
+
 
 @app.get("/")
 async def status():
-    cache_key = "status"
-    cache_value = r.get(cache_key)
+    cache_value = r.get("status")
     if cache_value:
         return eval(cache_value)
 
@@ -234,10 +230,10 @@ async def status():
         async with httpx.AsyncClient() as client:
             response = await client.get("https://example.com")
             if response.status_code == 200:
-                r.setex(cache_key, 600, '{"status": "UP"}')
+                r.setex("status", 600, '{"status": "UP"}')
                 return {"status": "OK"}
             else:
-                r.setex(cache_key, 600, '{"status": "DOWN"}')
+                r.setex("status", 600, '{"status": "DOWN"}')
                 return {"status": "DOWN"}
 
 

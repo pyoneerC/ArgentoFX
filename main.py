@@ -3,18 +3,18 @@ from bs4 import BeautifulSoup
 import requests
 from fastapi import FastAPI, HTTPException
 import redis
-import os
 from dotenv import load_dotenv
 
 load_dotenv()
 app = FastAPI()
 
 r = redis.Redis(
-  host='assured-shrew-49745.upstash.io',
-  port=6379,
-  password='AcJRAAIjcDFkZmQ4MzA5NGM2MjU0NTNlOWI4OTVjYzNiODAwZjY5MnAxMA',
-  ssl=True
+    host='assured-shrew-49745.upstash.io',
+    port=6379,
+    password='AcJRAAIjcDFkZmQ4MzA5NGM2MjU0NTNlOWI4OTVjYzNiODAwZjY5MnAxMA',
+    ssl=True
 )
+
 
 def extract_value(element, type_value):
     try:
@@ -81,7 +81,7 @@ def scrape_currency_website(currency_type, venta_index, compra_index):
 
 def scrape_dolar_hoy(category):
     url = f"https://dolarhoy.com/cotizacion-{category}"
-    cache_key = f"{category}_value"
+    cache_key = f"{category}"
     cached_value = r.get(cache_key)
     if cached_value:
         return eval(cached_value)

@@ -84,7 +84,7 @@ def scrape_dolar_hoy(category):
     url = f"https://dolarhoy.com/cotizacion-{category}"
     cache_value = r.get(category)
     if cache_value:
-        return json.loads(cache_value)
+        return eval(cache_value)
 
     try:
         response = requests.get(url)
@@ -117,7 +117,7 @@ def scrape_dolar_hoy(category):
             "spread": f"{venta - compra:.2f} ARS",
         }
 
-        r.setex(category, 6000, json.dumps(result))
+        r.setex(category, 6000, str(result))
 
         return result
 

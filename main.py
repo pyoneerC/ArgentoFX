@@ -11,7 +11,7 @@ app = FastAPI()
 
 r = redis.Redis(
     host=os.getenv("REDIS_HOST"),
-    port=int(os.getenv("REDIS_PORT")),
+    port=6379,
     password=os.getenv("REDIS_PASSWORD"),
     ssl=True
 )
@@ -211,12 +211,21 @@ async def scrape_all():
 
 @app.get("/")
 async def status():
+    cache_key = "status"
+    cache_value = r.get(cache_key)
+    if cache_value:
+        return eval(cache_value)
+
     try:
         async with httpx.AsyncClient() as client:
             response = await client.get("https://example.com")
             if response.status_code == 200:
+                r.setex(cache_key, 600, '{"status": "UP"}')
                 return {"status": "OK"}
             else:
+                r.setex(cache_key, 600, '{"status": "DOWN"}')
                 return {"status": "DOWN"}
+
+
     except Exception as e:
         return {"status": "DOWN ", "error": str(e)}

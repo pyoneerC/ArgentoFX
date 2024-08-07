@@ -222,20 +222,13 @@ async def scrape_all():
 
 @app.get("/")
 async def status():
-    cache_value = r.get("status")
-    if cache_value:
-        return eval(cache_value)
-
     try:
         async with httpx.AsyncClient() as client:
             response = await client.get("https://example.com")
             if response.status_code == 200:
-                r.setex("status", 600, '{"status": "UP"}')
                 return {"status": "OK"}
             else:
-                r.setex("status", 600, '{"status": "DOWN"}')
                 return {"status": "DOWN"}
-
 
     except Exception as e:
         return {"status": "DOWN ", "error": str(e)}

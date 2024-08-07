@@ -59,6 +59,46 @@ def scrape_currency_website(currency_type, venta_index, compra_index):
         raise HTTPException(status_code=500, detail=f"Internal Server Error: {e}")
 
 
+def scrape_dolar_hoy(category):
+    url = f"https://dolarhoy.com/cotizacion-{category}"
+    try:
+        response = requests.get(url)
+
+        if response.status_code != 200:
+            raise HTTPException(
+                status_code=404, detail="Failed to fetch the webpage"
+            )
+
+        soup = BeautifulSoup(response.content, "html.parser")
+        values = soup.find_all("div", class_="value")
+
+        if len(values) < 2:
+            raise HTTPException(
+                status_code=404, detail="Required elements not found"
+            )
+
+        compra_text = values[0].text.replace(",", ".").replace("$", "").strip()
+        venta_text = values[1].text.replace(",", ".").replace("$", "").strip()
+
+        compra = float(compra_text)
+        venta = float(venta_text)
+        promedio = (compra + venta) / 2
+
+        return {
+            "currency": category.capitalize(),
+            "compra": f"{compra:.2f} ARS",
+            "venta": f"{venta:.2f} ARS",
+            "promedio": f"{promedio:.2f} ARS",
+            "spread": f"{venta - compra:.2f} ARS",
+        }
+    except requests.RequestException as e:
+        raise HTTPException(status_code=500, detail=f"Request error: {e}")
+    except ValueError as e:
+        raise HTTPException(status_code=500, detail=f"Value error: {e}")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Internal Server Error: {e}")
+
+
 @app.get("/blue")
 async def scrape_blue():
     return scrape_currency_website("blue", 1, 2)
@@ -97,7 +137,6 @@ async def scrape_tarjeta():
 @app.get("/usd")
 async def scrape_usd():
     return {
-        "request_info": "GET /usd",
         "blue": await scrape_blue(),
         "oficial": await scrape_oficial(),
         "MEP": await scrape_mep(),
@@ -110,217 +149,22 @@ async def scrape_usd():
 
 @app.get("/euro")
 async def scrape_euro():
-    url = "https://dolarhoy.com/cotizacion-euro"
-    try:
-        async with httpx.AsyncClient() as client:
-            response = await client.get(url)
-
-            if response.status_code != 200:
-                raise HTTPException(
-                    status_code=404, detail="Failed to fetch the webpage"
-                )
-
-            soup = BeautifulSoup(response.content, "html.parser")
-            values = soup.find_all("div", class_="value")
-
-            if len(values) < 2:
-                raise HTTPException(
-                    status_code=404, detail="Required elements not found"
-                )
-
-            compra_text = values[0].text.replace(",", ".").replace("$", "").strip()
-            venta_text = values[1].text.replace(",", ".").replace("$", "").strip()
-
-            compra = float(compra_text)
-            venta = float(venta_text)
-            promedio = (compra + venta) / 2
-
-            return {
-                "request_info": "GET /euro",
-                "currency": "Euro",
-                "compra": f"{compra:.2f} ARS",
-                "venta": f"{venta:.2f} ARS",
-                "promedio": f"{promedio:.2f} ARS",
-                "spread": f"{venta - compra:.2f} ARS",
-            }
-
-    except httpx.RequestError as e:
-        raise HTTPException(status_code=500, detail=f"Request error: {e}")
-    except ValueError as e:
-        raise HTTPException(status_code=500, detail=f"Value error: {e}")
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Internal Server Error: {e}")
+    return scrape_dolar_hoy("euro")
 
 
 @app.get("/real")
 async def scrape_real():
-    url = "https://dolarhoy.com/cotizacion-real-brasileno"
-    try:
-        async with httpx.AsyncClient() as client:
-            response = await client.get(url)
-
-            if response.status_code != 200:
-                raise HTTPException(
-                    status_code=404, detail="Failed to fetch the webpage"
-                )
-
-            soup = BeautifulSoup(response.content, "html.parser")
-            values = soup.find_all("div", class_="value")
-
-            if len(values) < 2:
-                raise HTTPException(
-                    status_code=404, detail="Required elements not found"
-                )
-
-            compra_text = values[0].text.replace(",", ".").replace("$", "").strip()
-            venta_text = values[1].text.replace(",", ".").replace("$", "").strip()
-
-            compra = float(compra_text)
-            venta = float(venta_text)
-            promedio = (compra + venta) / 2
-
-            return {
-                "request_info": "GET /real",
-                "currency": "Real",
-                "compra": f"{compra:.2f} ARS",
-                "venta": f"{venta:.2f} ARS",
-                "promedio": f"{promedio:.2f} ARS",
-                "spread": f"{venta - compra:.2f} ARS",
-            }
-    except httpx.RequestError as e:
-        raise HTTPException(status_code=500, detail=f"Request error: {e}")
-    except ValueError as e:
-        raise HTTPException(status_code=500, detail=f"Value error: {e}")
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Internal Server Error: {e}")
+    return scrape_dolar_hoy("real-brasileno")
 
 
 @app.get("/clp")
 async def scrape_chilenos():
-    url = "https://dolarhoy.com/cotizacion-peso-chileno"
-    try:
-        async with httpx.AsyncClient() as client:
-            response = await client.get(url)
-
-            if response.status_code != 200:
-                raise HTTPException(
-                    status_code=404, detail="Failed to fetch the webpage"
-                )
-
-            soup = BeautifulSoup(response.content, "html.parser")
-            values = soup.find_all("div", class_="value")
-
-            if len(values) < 2:
-                raise HTTPException(
-                    status_code=404, detail="Required elements not found"
-                )
-
-            # Extract the values and clean them
-            compra_text = values[0].text.replace(",", ".").replace("$", "").strip()
-            venta_text = values[1].text.replace(",", ".").replace("$", "").strip()
-
-            compra = float(compra_text)
-            venta = float(venta_text)
-            promedio = (compra + venta) / 2
-
-            return {
-                "request_info": "GET /clp",
-                "currency": "Chilenos",
-                "compra": f"{compra:.2f} ARS",
-                "venta": f"{venta:.2f} ARS",
-                "promedio": f"{promedio:.2f} ARS",
-                "spread": f"{venta - compra:.2f} ARS",
-            }
-
-    except httpx.RequestError as e:
-        raise HTTPException(status_code=500, detail=f"Request error: {e}")
-    except ValueError as e:
-        raise HTTPException(status_code=500, detail=f"Value error: {e}")
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Internal Server Error: {e}")
+    return scrape_dolar_hoy("peso-chileno")
 
 
 @app.get("/uru")
 async def scrape_uruguayos():
-    url = "https://dolarhoy.com/cotizacion-peso-uruguayo"
-    try:
-        async with httpx.AsyncClient() as client:
-            response = await client.get(url)
-
-            if response.status_code != 200:
-                raise HTTPException(
-                    status_code=404, detail="Failed to fetch the webpage"
-                )
-
-            soup = BeautifulSoup(response.content, "html.parser")
-            values = soup.find_all("div", class_="value")
-
-            if len(values) < 2:
-                raise HTTPException(
-                    status_code=404, detail="Required elements not found"
-                )
-
-            # Extract the values and clean them
-            compra_text = values[0].text.replace(",", ".").replace("$", "").strip()
-            venta_text = values[1].text.replace(",", ".").replace("$", "").strip()
-
-            compra = float(compra_text)
-            venta = float(venta_text)
-            promedio = (compra + venta) / 2
-
-            return {
-                "request_info": "GET /uru",
-                "currency": "Uruguayos",
-                "compra": f"{compra:.2f} ARS",
-                "venta": f"{venta:.2f} ARS",
-                "promedio": f"{promedio:.2f} ARS",
-                "spread": f"{venta - compra:.2f} ARS",
-            }
-
-    except httpx.RequestError as e:
-        raise HTTPException(status_code=500, detail=f"Request error: {e}")
-    except ValueError as e:
-        raise HTTPException(status_code=500, detail=f"Value error: {e}")
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Internal Server Error: {e}")
-
-
-@app.get("/oro")
-async def scrape_oro():
-    url = "https://dolarhoy.com/cotizacion-oro"
-    try:
-        async with httpx.AsyncClient() as client:
-            response = await client.get(url)
-
-            if response.status_code != 200:
-                raise HTTPException(
-                    status_code=404, detail="Failed to fetch the webpage"
-                )
-
-            soup = BeautifulSoup(response.content, "html.parser")
-            values = soup.find_all("div", class_="value")
-
-            if len(values) < 1:
-                raise HTTPException(
-                    status_code=404, detail="Required elements not found"
-                )
-
-            venta_text = values[0].text.replace(",", ".").replace("$", "").strip()
-
-            venta = float(venta_text)
-
-            return {
-                "request_info": "GET /oro",
-                "currency": "Oro",
-                "venta": f"{venta:.2f} ARS",
-            }
-
-    except httpx.RequestError as e:
-        raise HTTPException(status_code=500, detail=f"Request error: {e}")
-    except ValueError as e:
-        raise HTTPException(status_code=500, detail=f"Value error: {e}")
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Internal Server Error: {e}")
+    return scrape_dolar_hoy("peso-uruguayo")
 
 
 @app.get("/cotizaciones")
@@ -331,7 +175,6 @@ async def scrape_all():
         "real": await scrape_real(),
         "clp": await scrape_chilenos(),
         "uru": await scrape_uruguayos(),
-        "oro": await scrape_oro(),
     }
 
 
@@ -341,46 +184,8 @@ async def status():
         async with httpx.AsyncClient() as client:
             response = await client.get("https://example.com")
             if response.status_code == 200:
-                return {"status": "up :)"}
+                return {"status": "OK"}
             else:
-                return {"status": "down :("}
+                return {"status": "DOWN"}
     except Exception as e:
-        return {"status": "down :( ", "error": str(e)}
-
-
-conversion_rates = {
-    "USD": 1.0,
-    "EUR": 0.92,
-    "ARS": 923.86,
-    "BRL": 5.60,
-    "CLP": 941.75,
-    "UYU": 40.27,
-    "GBP": 0.77,
-    "JPY": 157.48,
-    "CNY": 7.27,
-    "BTC": 0.000015,
-    "AUD": 1.50,
-}
-
-
-@app.get("/convert/{from_currency}/{to_currency}/{amount}")
-async def convert_currency(from_currency: str, to_currency: str, amount: float):
-    try:
-        if from_currency not in conversion_rates or to_currency not in conversion_rates:
-            raise HTTPException(status_code=404, detail="Currency not supported")
-
-        converted_amount = (
-            amount / conversion_rates[from_currency]
-        ) * conversion_rates[to_currency]
-        return {
-            "request_info": f"GET /convert/{from_currency}/{to_currency}/{amount}",
-            "from_currency": from_currency,
-            "to_currency": to_currency,
-            "original_amount": amount,
-            "converted_amount": converted_amount,
-            "conversion_rate": conversion_rates[to_currency]
-            / conversion_rates[from_currency],
-            "price": f"{from_currency} {amount} = {to_currency} {converted_amount:.2f}",
-        }
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        return {"status": "DOWN ", "error": str(e)}

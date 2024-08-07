@@ -168,7 +168,7 @@ async def scrape_tarjeta():
 async def scrape_usd():
     cache_value = r.get("usd")
     if cache_value:
-        return json.loads(cache_value)
+        return eval(cache_value)
 
     result = {
         "blue": await scrape_blue(),
@@ -180,7 +180,7 @@ async def scrape_usd():
         "Tarjeta": await scrape_tarjeta(),
     }
 
-    r.setex("usd", 6000, json.dumps(result))
+    r.setex("usd", 6000, str(result))
     return result
 
 
@@ -208,7 +208,7 @@ async def scrape_uruguayos():
 async def scrape_all():
     cache_value = r.get("cotizaciones")
     if cache_value:
-        return json.loads(cache_value)
+        return eval(cache_value)
 
     result = {
         "usd": await scrape_usd(),
@@ -218,7 +218,7 @@ async def scrape_all():
         "uru": await scrape_uruguayos(),
     }
 
-    r.setex("cotizaciones", 6000, json.dumps(result))
+    r.setex("cotizaciones", 6000, str(result))
     return result
 
 

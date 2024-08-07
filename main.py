@@ -28,8 +28,8 @@ def extract_value(element, type_value):
 def scrape_currency_website(currency_type, venta_index, compra_index):
     main_url = "https://dolar-arg-app.netlify.app"
     cache_key = currency_type
-    cached_value = r.get(cache_key)
-    if cached_value:
+    if r.exists(cache_key):
+        cached_value = r.get(cache_key)
         return eval(cached_value)
 
     try:
@@ -67,7 +67,7 @@ def scrape_currency_website(currency_type, venta_index, compra_index):
             "spread": f"{venta_value - compra_value:.2f} ARS",
         }
 
-        r.setex(currency_type, 1200, str(result))
+        r.setex(currency_type, 6000, str(result))
 
         return result
 
@@ -82,8 +82,8 @@ def scrape_currency_website(currency_type, venta_index, compra_index):
 def scrape_dolar_hoy(category):
     url = f"https://dolarhoy.com/cotizacion-{category}"
     cache_key = f"{category}"
-    cached_value = r.get(cache_key)
-    if cached_value:
+    if r.exists(cache_key):
+        cached_value = r.get(cache_key)
         return eval(cached_value)
 
     try:
@@ -117,7 +117,7 @@ def scrape_dolar_hoy(category):
             "spread": f"{venta - compra:.2f} ARS",
         }
 
-        r.setex(cache_key, 1200, str(result))
+        r.setex(cache_key, 6000, str(result))
 
         return result
 

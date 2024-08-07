@@ -166,7 +166,12 @@ async def scrape_tarjeta():
 
 @app.get("/usd")
 async def scrape_usd():
-    return {
+    cache_key = "usd"
+    if r.exists(cache_key):
+        cached_value = r.get(cache_key)
+        return eval(cached_value)
+
+    result = {
         "blue": await scrape_blue(),
         "oficial": await scrape_oficial(),
         "MEP": await scrape_mep(),
@@ -175,6 +180,9 @@ async def scrape_usd():
         "Cripto": await scrape_cripto(),
         "Tarjeta": await scrape_tarjeta(),
     }
+
+    r.setex(cache_key, 6000, str(result))
+    return result
 
 
 @app.get("/euro")
@@ -199,7 +207,12 @@ async def scrape_uruguayos():
 
 @app.get("/cotizaciones")
 async def scrape_all():
-    return {
+    cache_key = "cotizaciones"
+    if r.exists(cache_key):
+        cached_value = r.get(cache_key)
+        return eval(cached_value)
+
+    result = {
         "usd": await scrape_usd(),
         "euro": await scrape_euro(),
         "real": await scrape_real(),
@@ -207,6 +220,8 @@ async def scrape_all():
         "uru": await scrape_uruguayos(),
     }
 
+    r.setex(cache_key, 6000, str(result))
+    return result
 
 @app.get("/")
 async def status():

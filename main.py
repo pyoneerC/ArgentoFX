@@ -1,5 +1,3 @@
-import os
-
 import httpx
 from bs4 import BeautifulSoup
 import requests
@@ -13,7 +11,7 @@ app = FastAPI()
 r = redis.Redis(
     host='assured-shrew-49745.upstash.io',
     port=6379,
-    password=os.getenv("REDIS_PASSWORD"),
+    password='AcJRAAIjcDFkZmQ4MzA5NGM2MjU0NTNlOWI4OTVjYzNiODAwZjY5MnAxMA',
     ssl=True
 )
 

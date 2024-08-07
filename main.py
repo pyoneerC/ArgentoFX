@@ -27,7 +27,7 @@ def extract_value(element, type_value):
 
 def scrape_currency_website(currency_type, venta_index, compra_index):
     main_url = "https://dolar-arg-app.netlify.app"
-    cache_value = r.get(currency_type)
+    cache_value = r.get(currency_type.lower())
     if cache_value:
         return eval(cache_value)
 
@@ -66,7 +66,7 @@ def scrape_currency_website(currency_type, venta_index, compra_index):
             "spread": f"{venta_value - compra_value:.2f} ARS",
         }
 
-        r.setex(currency_type, 6000, str(result))
+        r.setex(currency_type.lower(), 6000, str(result))
 
         return result
 

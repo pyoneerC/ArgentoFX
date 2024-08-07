@@ -2,8 +2,19 @@ import httpx
 from bs4 import BeautifulSoup
 import requests
 from fastapi import FastAPI, HTTPException
+import redis
+import os
+from dotenv import load_dotenv
 
+load_dotenv()
 app = FastAPI()
+
+r = redis.Redis(
+    host=os.getenv("REDIS_HOST"),
+    port=int(os.getenv("REDIS_PORT")),
+    password=os.getenv("REDIS_PASSWORD"),
+    ssl=True
+)
 
 
 def extract_value(element, type_value):
@@ -17,6 +28,11 @@ def extract_value(element, type_value):
 
 def scrape_currency_website(currency_type, venta_index, compra_index):
     main_url = "https://dolar-arg-app.netlify.app"
+    cache_key = currency_type
+    cached_value = r.get(cache_key)
+    if cached_value:
+        return eval(cached_value)
+
     try:
         response = requests.get(main_url)
 
@@ -44,13 +60,18 @@ def scrape_currency_website(currency_type, venta_index, compra_index):
 
         promedio = (compra_value + venta_value) / 2
 
-        return {
+        result = {
             "currency": currency_type,
             "compra": f"{compra_value:.2f} ARS",
             "venta": f"{venta_value:.2f} ARS",
             "promedio": f"{promedio:.2f} ARS",
             "spread": f"{venta_value - compra_value:.2f} ARS",
         }
+
+        r.setex(currency_type, 1200, str(result))
+
+        return result
+
     except requests.RequestException as e:
         raise HTTPException(status_code=500, detail=f"Request error: {e}")
     except ValueError as e:
@@ -61,6 +82,11 @@ def scrape_currency_website(currency_type, venta_index, compra_index):
 
 def scrape_dolar_hoy(category):
     url = f"https://dolarhoy.com/cotizacion-{category}"
+    cache_key = f"{category}_value"
+    cached_value = r.get(cache_key)
+    if cached_value:
+        return eval(cached_value)
+
     try:
         response = requests.get(url)
 
@@ -84,13 +110,18 @@ def scrape_dolar_hoy(category):
         venta = float(venta_text)
         promedio = (compra + venta) / 2
 
-        return {
+        result = {
             "currency": category.capitalize(),
             "compra": f"{compra:.2f} ARS",
             "venta": f"{venta:.2f} ARS",
             "promedio": f"{promedio:.2f} ARS",
             "spread": f"{venta - compra:.2f} ARS",
         }
+
+        r.setex(cache_key, 1200, str(result))
+
+        return result
+
     except requests.RequestException as e:
         raise HTTPException(status_code=500, detail=f"Request error: {e}")
     except ValueError as e:

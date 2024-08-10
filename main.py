@@ -2,7 +2,7 @@ import json
 import httpx
 from bs4 import BeautifulSoup
 import requests
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Depends
 import redis
 from dotenv import load_dotenv
 from fastapi.middleware.cors import CORSMiddleware
@@ -18,6 +18,15 @@ app = FastAPI(
         {"name": "otros", "description": "Cotizaciones de otras divisas"},
         {"name": "status", "description": "Estado del servidor"},
     ],
+    contact={
+        "name": "Max Comperatore",
+        "url": "https://maxcomperatore.com",
+        "email": "maxcomperatore@gmail.com"
+    },
+    license_info={
+        "name": "Unlicense",
+        "url": "https://unlicense.org"
+    }
 )
 
 app.add_middleware(
@@ -34,7 +43,6 @@ r = redis.Redis(
     password='AcJRAAIjcDFkZmQ4MzA5NGM2MjU0NTNlOWI4OTVjYzNiODAwZjY5MnAxMA',
     ssl=True
 )
-
 
 def extract_value(element, type_value):
     try:
@@ -152,37 +160,37 @@ async def scrape_blue():
     return scrape_currency_website("blue", 1, 2)
 
 
-@app.get("/oficial", tags=["usd"])
+@app.get("/oficial", tags=["usd"], summary="Cotización del dólar oficial")
 async def scrape_oficial():
     return scrape_currency_website("oficial", 0, 1)
 
 
-@app.get("/mep", tags=["usd"])
+@app.get("/mep", tags=["usd"], summary="Cotización del dólar MEP")
 async def scrape_mep():
     return scrape_currency_website("MEP", 2, 3)
 
 
-@app.get("/ccl", tags=["usd"])
+@app.get("/ccl", tags=["usd"], summary="Cotización del dólar CCL")
 async def scrape_ccl():
     return scrape_currency_website("CCL", 3, 4)
 
 
-@app.get("/mayorista", tags=["usd"])
+@app.get("/mayorista", tags=["usd"], summary="Cotización del dólar mayorista")
 async def scrape_mayorista():
     return scrape_currency_website("Mayorista", 4, 5)
 
 
-@app.get("/cripto", tags=["usd"])
+@app.get("/cripto", tags=["usd"], summary="Cotización del dólar cripto")
 async def scrape_cripto():
     return scrape_currency_website("Cripto", 5, 6)
 
 
-@app.get("/tarjeta", tags=["usd"])
+@app.get("/tarjeta", tags=["usd"], summary="Cotización del dólar tarjeta")
 async def scrape_tarjeta():
     return scrape_currency_website("Tarjeta", 6, 7)
 
 
-@app.get("/usd", tags=["usd"])
+@app.get("/usd", tags=["usd"], summary="Cotizaciones del dólar")
 async def scrape_usd():
     cache_value = r.get("usd")
     if cache_value:
@@ -202,27 +210,27 @@ async def scrape_usd():
     return result
 
 
-@app.get("/euro", tags=["otros"])
+@app.get("/euro", tags=["otros"], summary="Cotización del euro")
 async def scrape_euro():
     return scrape_dolar_hoy("euro")
 
 
-@app.get("/real", tags=["otros"])
+@app.get("/real", tags=["otros"], summary="Cotización del real")
 async def scrape_real():
     return scrape_dolar_hoy("real-brasileno")
 
 
-@app.get("/clp", tags=["otros"])
+@app.get("/clp", tags=["otros"], summary="Cotización del peso chileno")
 async def scrape_chilenos():
     return scrape_dolar_hoy("peso-chileno")
 
 
-@app.get("/uru", tags=["otros"])
+@app.get("/uru", tags=["otros"], summary="Cotización del peso uruguayo")
 async def scrape_uruguayos():
     return scrape_dolar_hoy("peso-uruguayo")
 
 
-@app.get("/cotizaciones", tags=["otros"])
+@app.get("/cotizaciones", tags=["otros"], summary="Cotizaciones de otras divisas")
 async def scrape_all():
     cache_value = r.get("cotizaciones")
     if cache_value:
@@ -240,7 +248,7 @@ async def scrape_all():
     return result
 
 
-@app.get("/", tags=["status"])
+@app.get("/", tags=["status"], summary="Estado del servidor")
 async def status():
     try:
         async with httpx.AsyncClient() as client:

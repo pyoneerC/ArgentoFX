@@ -1,14 +1,32 @@
 import json
-
 import httpx
 from bs4 import BeautifulSoup
 import requests
 from fastapi import FastAPI, HTTPException
 import redis
 from dotenv import load_dotenv
+from fastapi.middleware.cors import CORSMiddleware
 
 load_dotenv()
-app = FastAPI()
+
+app = FastAPI(
+    title="ArgentoFX",
+    description="API RESTful para obtener cotizaciones de divisas extranjeras en vivo, en Argentina.",
+    version="4.0.0",
+    openapi_tags=[
+        {"name": "usd", "description": "Cotizaciones del dólar"},
+        {"name": "otros", "description": "Cotizaciones de otras divisas"},
+        {"name": "status", "description": "Estado del servidor"},
+    ],
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 r = redis.Redis(
     host='assured-shrew-49745.upstash.io',
@@ -129,42 +147,42 @@ def scrape_dolar_hoy(category):
         raise HTTPException(status_code=500, detail=f"Internal Server Error: {e}")
 
 
-@app.get("/blue")
+@app.get("/blue", tags=["usd"], summary="Cotización del dólar blue")
 async def scrape_blue():
     return scrape_currency_website("blue", 1, 2)
 
 
-@app.get("/oficial")
+@app.get("/oficial", tags=["usd"])
 async def scrape_oficial():
     return scrape_currency_website("oficial", 0, 1)
 
 
-@app.get("/mep")
+@app.get("/mep", tags=["usd"])
 async def scrape_mep():
     return scrape_currency_website("MEP", 2, 3)
 
 
-@app.get("/ccl")
+@app.get("/ccl", tags=["usd"])
 async def scrape_ccl():
     return scrape_currency_website("CCL", 3, 4)
 
 
-@app.get("/mayorista")
+@app.get("/mayorista", tags=["usd"])
 async def scrape_mayorista():
     return scrape_currency_website("Mayorista", 4, 5)
 
 
-@app.get("/cripto")
+@app.get("/cripto", tags=["usd"])
 async def scrape_cripto():
     return scrape_currency_website("Cripto", 5, 6)
 
 
-@app.get("/tarjeta")
+@app.get("/tarjeta", tags=["usd"])
 async def scrape_tarjeta():
     return scrape_currency_website("Tarjeta", 6, 7)
 
 
-@app.get("/usd")
+@app.get("/usd", tags=["usd"])
 async def scrape_usd():
     cache_value = r.get("usd")
     if cache_value:
@@ -184,27 +202,27 @@ async def scrape_usd():
     return result
 
 
-@app.get("/euro")
+@app.get("/euro", tags=["otros"])
 async def scrape_euro():
     return scrape_dolar_hoy("euro")
 
 
-@app.get("/real")
+@app.get("/real", tags=["otros"])
 async def scrape_real():
     return scrape_dolar_hoy("real-brasileno")
 
 
-@app.get("/clp")
+@app.get("/clp", tags=["otros"])
 async def scrape_chilenos():
     return scrape_dolar_hoy("peso-chileno")
 
 
-@app.get("/uru")
+@app.get("/uru", tags=["otros"])
 async def scrape_uruguayos():
     return scrape_dolar_hoy("peso-uruguayo")
 
 
-@app.get("/cotizaciones")
+@app.get("/cotizaciones", tags=["otros"])
 async def scrape_all():
     cache_value = r.get("cotizaciones")
     if cache_value:
@@ -222,7 +240,7 @@ async def scrape_all():
     return result
 
 
-@app.get("/")
+@app.get("/", tags=["status"])
 async def status():
     try:
         async with httpx.AsyncClient() as client:

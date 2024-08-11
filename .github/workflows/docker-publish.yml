@@ -102,6 +102,6 @@ jobs:
         with:
             platforms: linux/amd64
             latest: true
-            tags: pyoneerc/argentofx:latest
+            tags: queondadocker/argentofx:latest
             token: ${{ secrets.DOCKER_HUB_TOKEN }}
             username: ${{ secrets.DOCKER_HUB_USERNAME }}

@@ -96,3 +96,11 @@ jobs:
         # This step uses the identity token to provision an ephemeral certificate
         # against the sigstore community Fulcio instance.
         run: echo "${TAGS}" | xargs -I {} cosign sign --yes {}@${DIGEST}
+
+      - name: 'Build and push image'
+        uses: rtvu/build-and-push-to-docker-hub-action@v2
+        with:
+            platforms: linux/amd64
+            tags: latest
+            token: ${{ secrets.DOCKER_HUB_TOKEN }}
+            username: ${{ secrets.DOCKER_HUB_USERNAME }}

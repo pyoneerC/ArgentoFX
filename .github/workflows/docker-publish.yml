@@ -101,6 +101,6 @@ jobs:
         uses: rtvu/build-and-push-to-docker-hub-action@v2
         with:
             platforms: linux/amd64
-            tags: pyoneerc/argentofx:latest
+            tags: pyoneerc/argentofx:latest,pyoneerc/argentofx:v1.0.0
             token: ${{ secrets.DOCKER_HUB_TOKEN }}
             username: ${{ secrets.DOCKER_HUB_USERNAME }}

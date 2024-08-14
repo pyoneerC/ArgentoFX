@@ -1,4 +1,6 @@
 import json
+from functools import lru_cache
+
 import httpx
 from bs4 import BeautifulSoup
 import requests
@@ -53,6 +55,7 @@ def extract_value(element, type_value):
         raise ValueError(f"Failed to convert {type_value} value to float: {e}")
 
 
+@lru_cache(maxsize=7)
 def scrape_currency_website(currency_type, venta_index, compra_index):
     main_url = "https://dolar-arg-app.netlify.app"
     cache_value = r.get(currency_type.lower())
@@ -106,6 +109,7 @@ def scrape_currency_website(currency_type, venta_index, compra_index):
         raise HTTPException(status_code=500, detail=f"Internal Server Error: {e}")
 
 
+@lru_cache(maxsize=4)
 def scrape_dolar_hoy(category):
     url = f"https://dolarhoy.com/cotizacion-{category}"
     cache_value = r.get(category)

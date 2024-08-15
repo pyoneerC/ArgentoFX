@@ -95,7 +95,7 @@ def scrape_currency_website(currency_type, venta_index, compra_index):
             "venta": f"{venta_value:.2f} ARS",
             "promedio": f"{promedio:.2f} ARS",
             "spread": f"{venta_value - compra_value:.2f} ARS",
-        }
+        } 
 
         r.setex(currency_type.lower(), 6000, json.dumps(result))
 

@@ -13,7 +13,11 @@ load_dotenv()
 
 app = FastAPI(
     title="ArgentoFX",
-    description="API RESTful para obtener cotizaciones de divisas extranjeras en vivo, en Argentina.",
+    description=(
+        "API RESTful para obtener cotizaciones de divisas extranjeras en vivo, en Argentina.\n\n"
+        "##### Ver en [Docker Hub](https://hub.docker.com/r/maxcomperatore/argentofx).\n\n"
+        "##### Ver en [GitHub](https://github.com/pyoneerC/argentofx)."
+    ),
     version="4.0.0",
     openapi_tags=[
         {"name": "usd", "description": "Cotizaciones del dólar"},
@@ -30,6 +34,7 @@ app = FastAPI(
         "url": "https://unlicense.org"
     }
 )
+
 
 app.add_middleware(
     CORSMiddleware,

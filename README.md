@@ -13,7 +13,7 @@ Monedas API es una aplicación robusta desarrollada con FastAPI, diseñada para 
 ![Monedas API GIF](imgs/api.gif)
 
 > [!NOTE]
-> Inspirado por la [Dolar API](https://github.com/enzonotario/esjs-dolar-api) de Enzo Notario.
+> Ver en [Docker Hub](https://hub.docker.com/repository/docker/maxcomperatore/argentofx/general).
 
 ## Funcionalidades
 

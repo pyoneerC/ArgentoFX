@@ -1,4 +1,4 @@
-# Monedas API
+# ArgentoFX
 
 ![GitHub repo size](https://img.shields.io/github/repo-size/pyoneerC/monedas-api)
 ![Website](https://img.shields.io/website?url=https%3A%2F%2Fmaxcomperatore.com)

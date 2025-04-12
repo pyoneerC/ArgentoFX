@@ -15,6 +15,9 @@
 > [!NOTE]  
 > See it on [Docker Hub](https://hub.docker.com/repository/docker/maxcomperatore/argentofx/general).
 
+> [!IMPORTANT]  
+> This API is hosted on Render’s free tier, which may come with usage limitations. Please use it responsibly, and consider deploying your own instance if needed.
+
 > [!CAUTION]  
 > **Important Notice (April 11, 2025):** Due to recent changes in Argentina's monetary policy, the currency control system ("cepo") has been officially lifted. As a result, alternative exchange rates such as blue, MEP, and CCL no longer exist.
 >
@@ -100,21 +103,18 @@ curl -X GET --location https://fastapiproject-1-eziw.onrender.com/euro
 
 ![Monedas API CLI](imgs/cli.png)
 
-## Diagrama de Arquitectura
+## Architecture Diagram
 
 ![Monedas API Architecture](imgs/architecturediagram.png)
 
-## Aplicaciones que consumen esta API
+## Applications Using This API
 
-- [Mercado Libre Price Chart](https://github.com/pyoneerC/mercado-libre-price-chart) - Una aplicación web que muestra un histograma de precios del producto seleccionado en Mercado Libre Argentina. (Hecha por mí)
+- [Mercado Libre Price Chart](https://github.com/pyoneerC/mercado-libre-price-chart) – A web application that displays a price histogram for selected products on Mercado Libre Argentina. (Built by me)
 
 ### Contributing
 
-¡Las contribuciones son bienvenidas! No dudes en enviar un pull request o abrir un issue si tienes alguna sugerencia o comentario.
+Contributions are welcome! Feel free to submit a pull request or open an issue if you have suggestions or feedback.
 
 ### License
 
-Este proyecto está licenciado bajo la Unlicense. Es parte del dominio público y puedes usarlo como desees.
-
-> [!IMPORTANT]
-> Esta API está alojada en el nivel gratuito de Render, que puede tener limitaciones de uso. Por favor, úsala de manera responsable y considera alojar tu propia instancia si es necesario.
+This project is licensed under the **Unlicense**. It is public domain software – you are free to use it however you wish.

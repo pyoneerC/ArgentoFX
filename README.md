@@ -4,57 +4,58 @@
 ![Website](https://img.shields.io/website?url=https%3A%2F%2Fmaxcomperatore.com)
 ![GitHub License](https://img.shields.io/github/license/pyoneerc/monedas-api)
 
-## Descripción General
+## Overview
 
-ArgentoFX es una aplicación robusta desarrollada con FastAPI, diseñada para proporcionar tasas de cambio de divisas en tiempo real mediante scraping de sitios web financieros. La API se enfoca principalmente en varias tasas de cambio en Argentina, incluyendo USD (blue, oficial, MEP, CCL), Euro, Real Brasileño, Peso Chileno, Peso Uruguayo, y más. También ofrece una función de conversión para convertir montos entre las monedas soportadas.
+**ArgentoFX** is a robust application built with **FastAPI**, designed to deliver real-time exchange rates through web scraping from financial websites. The API primarily focuses on various exchange rates relevant to Argentina, including USD (blue, official, MEP, CCL), Euro, Brazilian Real, Chilean Peso, Uruguayan Peso, and more. It also features a currency conversion tool for supported currencies.
 
 ![Monedas API](imgs/json.png)
 
 ![Monedas API GIF](imgs/api.gif)
 
-> [!NOTE]
-> Ver en [Docker Hub](https://hub.docker.com/repository/docker/maxcomperatore/argentofx/general).
+> [!NOTE]  
+> See it on [Docker Hub](https://hub.docker.com/repository/docker/maxcomperatore/argentofx/general).
 
-## Funcionalidades
+> [!CAUTION]  
+> **Important Notice (April 11, 2025):** Due to recent changes in Argentina's monetary policy, the currency control system ("cepo") has been officially lifted. As a result, alternative exchange rates such as blue, MEP, and CCL no longer exist.
+>
+> This means there is now only a single official exchange rate, significantly reducing the need for this API. Therefore, **ArgentoFX is now deprecated** and may stop functioning at any time as data sources phase out.
+>
+> While I will no longer maintain or update this project, I’m leaving it available for educational purposes. Feel free to fork it and adapt it for your own use.
 
-- **Tasas de Cambio en Tiempo Real**: Obtiene las últimas tasas de cambio para múltiples monedas, específicamente adaptadas para el mercado argentino.
-- **Conversión de Monedas**: Permite la conversión de montos de una moneda a otra utilizando las últimas tasas de cambio.
-- **Soporte Integral de Monedas**: Soporta una amplia gama de monedas, incluyendo USD (varias tasas), Euro, BRL, CLP, UYU, y más.
-- **Manejo Robusto de Errores**: Garantiza la obtención y procesamiento fiable de datos con mecanismos de manejo de errores integrales.
+## Features
+
+- **Real-Time Exchange Rates**: Fetches the latest exchange rates for multiple currencies, with a special focus on the Argentine market.
+- **Currency Conversion**: Allows conversion between currencies using the latest available rates.
+- **Comprehensive Currency Support**: Includes USD (with multiple rate types), Euro, BRL, CLP, UYU, Gold, and more.
+- **Robust Error Handling**: Ensures reliable data fetching and processing with built-in error management.
 
 ## Endpoints
 
-### Tasas de Cambio de Divisas
+### USD Exchange Rate Types
+- `/blue` – Blue Dollar rate
+- `/oficial` – Official Dollar rate
+- `/mep` – MEP Dollar rate
+- `/ccl` – CCL Dollar rate
+- `/mayorista` – Wholesale Dollar rate
+- `/cripto` – Crypto Dollar rate
+- `/tarjeta` – Credit Card Dollar rate
 
-Obtén las últimas tasas de cambio para varias monedas:
+### Other Currencies
+- `/usd` – United States Dollar
+- `/euro` – Euro
+- `/real` – Brazilian Real
+- `/clp` – Chilean Peso
+- `/uru` – Uruguayan Peso
+- `/oro` – Gold rate
 
-#### Tasas de USD
-- `/blue` - Tasa del Dólar Blue
-- `/oficial` - Tasa del Dólar Oficial
-- `/mep` - Tasa del Dólar MEP
-- `/ccl` - Tasa del Dólar CCL
-- `/mayorista` - Tasa del Dólar Mayorista
-- `/cripto` - Tasa del Dólar Cripto
-- `/tarjeta` - Tasa del Dólar Tarjeta
+Each endpoint returns the current exchange rate, including buy and sell prices, average rate, and the spread (difference between buy and sell).
 
-#### Otras Monedas
-- `/usd` - Tasa del Dólar Estadounidense
-- `/euro` - Tasa del Euro
-- `/real` - Tasa del Real Brasileño
-- `/clp` - Tasa del Peso Chileno
-- `/uru` - Tasa del Peso Uruguayo
-- `/oro` - Tasa del Oro
+## Documentation
 
-Cada endpoint proporciona la tasa de cambio actual, incluyendo precios de compra y venta, tasa promedio y la diferencia entre la venta y la compra (spread).
+- [API Docs (Swagger)](https://fastapiproject-1-eziw.onrender.com/docs) – Try it directly in your browser!
+- [Interactive API Explorer (ReDoc)](https://fastapiproject-1-eziw.onrender.com/redoc)
 
-### Documentación
-
-- [Documentación de la API](https://fastapiproject-1-eziw.onrender.com/docs) (¡pruébalo en el navegador!)
-
-> [!TIP]
-> Prueba la [API Interactiva!](https://fastapiproject-1-eziw.onrender.com/redoc)
-
-## Ejemplo de Uso
+## Example Usage
 
 ```bash
 curl -X GET --location https://fastapiproject-1-eziw.onrender.com/USD/EUR/100
